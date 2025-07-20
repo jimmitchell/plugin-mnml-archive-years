@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "title": "Archive with months",
+  "description": "Change the archive page to group posts by year and month.",
+  "includes": [
+    "/archive_months.css"
+  ]
+}
