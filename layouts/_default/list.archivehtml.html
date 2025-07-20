@@ -37,7 +37,7 @@
 		  <span class="p-name"><b>{{ .Title }}</b></span>
 		{{ end }}
 		<span class="p-summary">{{ .Summary | truncate 100 }}</span>
-		{{ if and .Params.archive_months_photos .Params.photos }}
+		{{ if and .Site.Params.archive_months_photos .Params.photos }}
 			{{ $first := index .Params.photos 0 }}
 			<a href="{{ .Permalink }}"><img src="{{ $first }}" alt="photo thumbnail" class="p-photo" width="50" height="50"></a>
 		{{ end }}
