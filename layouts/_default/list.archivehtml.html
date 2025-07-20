@@ -37,13 +37,17 @@
 		  <span class="p-name"><b>{{ .Title }}</b></span>
 		{{ end }}
 		<span class="p-summary">{{ .Summary | truncate 100 }}</span>
+		{{ if .Params.photos }}
+			{{ $first := index .Params.photos 0 }}
+			<a href="{{ .Permalink }}"><img src="{{ $first }}" alt="photo thumbnail" class="p-photo" width="50" height="50"></a>
+		{{ end }}
 	  </p>
 	{{ end }}
   </div>
 
   <script>
 	(function() {
-	  const years = {{ .Site.Params.years | jsonify }};
+	  const years = {{ .Site.Params.years | jsonify | safeJS }};
 	  const select = document.getElementById('archive_popup');
 
 	  // populate options
@@ -66,7 +70,7 @@
 		    el.style.display = (el.getAttribute('data-year') === sel) ? '' : 'none';
 		  });
 		
-      // show/hide each month header based on whether any following .h-entry is visible
+	// show/hide each month header based on whether any following .h-entry is visible
 		  document.querySelectorAll('.h-feed h2[data-month-year]').forEach(header => {
 		    let next = header.nextElementSibling;
 		    let keep = false;
