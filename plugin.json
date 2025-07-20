@@ -4,5 +4,12 @@
   "description": "Change the archive page to group posts by year and month.",
   "includes": [
     "/archive_months.css"
+  ],
+  "fields": [
+    {
+      "field": "params.archive_months_photos",
+      "label": "Include photo thumbnails",
+      "type": "boolean"
+    }
   ]
 }
