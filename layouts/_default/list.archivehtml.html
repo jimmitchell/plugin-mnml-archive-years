@@ -18,7 +18,7 @@
 
   {{ $posts := where .Site.Pages "Type" "post" }}
   {{ $.Scratch.Set "currentMonth" "" }}
-  <div class="h-feed">
+  <div class="h-feed archive_posts">
 	{{ range $posts }}
 	  {{ $thisMonth := .Date.Format "January 2006" }}
 	  {{ if ne $thisMonth ($.Scratch.Get "currentMonth") }}
