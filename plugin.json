@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "Archive with months",
   "description": "Change the archive page to group posts by year and month.",
   "includes": [
