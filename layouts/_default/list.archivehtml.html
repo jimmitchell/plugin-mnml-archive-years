@@ -12,8 +12,11 @@
 	</div>
   {{ end }}
 
+  {{ $currentYear := now.Format "2006" }}
   <div class="archive_years">
-	  <select id="archive_popup"></select>
+	<select id="archive_popup">
+		<option value="{{ $currentYear }}">{{ $currentYear }}</option>
+	</select>
   </div>
 
   {{ $posts := where .Site.Pages "Type" "post" }}
@@ -49,18 +52,20 @@
 	(function() {
 	  const years = {{ .Site.Params.years | jsonify | safeJS }};
 	  const select = document.getElementById('archive_popup');
+	  const defaultYear = new Date().getFullYear().toString();
 
 	  // populate options
 	  years.forEach(y => {
-		  const opt = document.createElement('option');
-		  opt.value = y;
-		  opt.textContent = y;
-		  select.appendChild(opt);
+		  if (y != defaultYear) {
+		  	const opt = document.createElement('option');
+		  	opt.value = y;
+		  	opt.textContent = y;
+		  	select.appendChild(opt);
+		  }
 	  });
 
 	  // load saved or default to current year
 	  const saved = localStorage.getItem('archive_year');
-	  const defaultYear = new Date().getFullYear().toString();
 	  select.value = saved || years.includes(+defaultYear) ? defaultYear : years[0];
 
 	  function filterPosts() {
