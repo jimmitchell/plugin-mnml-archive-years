@@ -1,6 +1,6 @@
 {
-  "version": "1.0.4",
-  "title": "Archive with months",
+  "version": "1.0.0",
+  "title": "mnml Archive with months",
   "description": "Change the archive page to group posts by year and month.",
   "includes": [
     "/archive_months.css"
