@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "title": "mnml Archive by Year",
-  "description": "Filter the mnml theme archive page year.",
+  "description": "Filter the mnml theme archive page by year.",
   "includes": [
     "/archive_year.css"
   ]
