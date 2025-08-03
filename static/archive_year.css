@@ -1,0 +1,7 @@
+.archive_years {
+  display: flex;
+  align-items: center;
+}
+.archive_years label {
+  margin-right: 10px;
+}

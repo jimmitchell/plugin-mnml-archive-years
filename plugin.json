@@ -1,15 +1,8 @@
 {
   "version": "1.0.0",
-  "title": "mnml Archive with months",
-  "description": "Change the archive page to group posts by year and month.",
+  "title": "mnml Archive by Year",
+  "description": "Filter the mnml theme archive page year.",
   "includes": [
-    "/archive_months.css"
-  ],
-  "fields": [
-    {
-      "field": "params.archive_months_photos",
-      "label": "Include photo thumbnails",
-      "type": "boolean"
-    }
+    "/archive_year.css"
   ]
 }

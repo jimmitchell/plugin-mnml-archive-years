@@ -1,105 +1,79 @@
-{{ define "main" }}
-	<main class="archive">
-		<article>
-		{{ $cats := (.Site.GetPage "taxonomyTerm" "categories").Pages }}
-		{{ if gt (len $cats) 0 }}
-			<div class="archive_categories">
-				<h2>Categories</h2>
-				<p>
-				{{ range $i, $cat := $cats }}
-					<a href="{{ $cat.Permalink }}">{{ $cat.Title }}</a>{{ if lt (add $i 1) (len $cats) }}, {{ end }}
-				{{ end }}
-				</p>
-			</div>
-		{{ end }}
-			
-		{{ $currentYear := now.Format "2006" }}
-			<div class="archive_years">
-				<select id="archive_popup">
-					<option value="{{ $currentYear }}">{{ $currentYear }}</option>
-				</select>
-			</div>
-			
-			{{ $posts := where .Site.Pages "Type" "post" }}
-			{{ $.Scratch.Set "currentMonth" "" }}
-			<div class="h-feed archive_posts">
-				{{ range $posts }}
-				{{ $thisMonth := .Date.Format "January 2006" }}
-				{{ if ne $thisMonth ($.Scratch.Get "currentMonth") }}
-					{{/* give each month header a marker so JS can hide it */}}
-					<h2 data-month-year="{{ .Date.Format "2006-01" }}">{{ $thisMonth }}</h2>
-					{{ $.Scratch.Set "currentMonth" $thisMonth }}
-				{{ end }}
-				{{ $year := .Date.Format "2006" }}
-				<p class="h-entry" data-year="{{ $year }}">
-					<a href="{{ .Permalink }}" class="u-url">
-						<time class="dt-published" datetime="{{ .Date.Format "2006-01-02T15:04:05-0700" }}">
-							{{ .Date.Format "2006-01-02" }}
-							</time>
-					</a>:
-				{{ if .Title }}
-					<span class="p-name"><b>{{ .Title }}</b></span>
-				{{ end }}
-					<span class="p-summary">{{ .Summary | plainify | htmlUnescape | truncate 100 }}</span>
-				{{ if and .Site.Params.archive_months_photos .Params.photos }}
-				{{ $first := index .Params.photos 0 }}
-					<a href="{{ .Permalink }}"><img src="{{ $first }}" alt="photo thumbnail" class="p-photo" width="50" height="50"></a>
-				{{ end }}
-				</p>
+{{- define "main" }}
+<main class="archive">
+	<article>
+		<h1 class="page-title">{{ .Title | safeHTML }}</h1>
+		{{- $list := ($.Site.GetPage "taxonomyTerm" "categories").Pages }}
+		{{- if and (.Site.Params.show_categories) (gt (len $list) 0) }}
+		<div class="archive-categories">
+			<div class="category-list">
+				{{ range $list }}
+				<a href="{{ .Permalink }}"><button>{{ .Title | safeHTML }}</button></a>
 				{{ end }}
 			</div>
-			
-			<script>
+		</div>
+		{{- end }}
+
+		{{- $posts := where .Site.RegularPages "Type" "post" }}
+		{{- $grouped := $posts.GroupByDate "2006" }}
+
+		<div class="archive_years">
+			<label for="archive_popup">{{ T "Show posts from" }}:</label>
+			<select id="archive_popup">
+				<option value="all">{{ T "All years" }}</option>
+				{{ range $grouped }}
+				<option value="{{ .Key }}">{{ .Key }}</option>
+				{{ end }}
+			</select>
+		</div>
+
+		<div class="h-feed archive_posts">
+			{{- range $grouped }}
+				<h3 class="archive-range" data-year="{{ .Key }}">{{ .Key }}</h3>
+				{{- range .Pages }}
+				<div class="post-container" data-year="{{ .Date.Format "2006" }}">
+					<p class="post-date h-entry">
+						<a href="{{ .Permalink }}">{{- if .Site.Params.use_short_date }}{{ .Date | time.Format ":date_short" }}{{- else }}{{ .Date | time.Format ":date_full" }}{{- end }} →</a>
+					</p>
+					<div class="entry">
+						<p>{{- if .Title }}<b>{{ .Title | safeHTML }}:</b>&nbsp;{{- end }}{{ .Summary | safeHTML | truncate 300  }}</p>
+					</div>
+				</div>
+				{{- end }}
+			{{- end }}
+		</div>
+
+		<script>
 			(function() {
-			const years = {{ .Site.Params.years | jsonify | safeJS }};
-			const select = document.getElementById('archive_popup');
-			const defaultYear = new Date().getFullYear().toString();
-			
-			// populate options
-			years.forEach(y => {
-			if (y != defaultYear) {
-			const opt = document.createElement('option');
-			opt.value = y;
-			opt.textContent = y;
-			select.appendChild(opt);
-			}
-			});
-			
-			// load saved or default to current year
-			const saved = localStorage.getItem('archive_year');
-			select.value = saved || years.includes(+defaultYear) ? defaultYear : years[0];
-			
-			function filterPosts() {
-			const sel = select.value;
-			// show/hide each entry
-			document.querySelectorAll('.h-feed .h-entry').forEach(el => {
-			el.style.display = (el.getAttribute('data-year') === sel) ? '' : 'none';
-			});
-			
-			// show/hide each month header based on whether any following .h-entry is visible
-			document.querySelectorAll('.h-feed h2[data-month-year]').forEach(header => {
-			let next = header.nextElementSibling;
-			let keep = false;
-			while (next && !next.matches('h2[data-month-year]')) {
-			if (next.matches('.h-entry') && (next.style.display != 'none')) {
-			keep = true; break;
-			}
-			next = next.nextElementSibling;
-			}
-			header.style.display = keep ? '' : 'none';
-			});
-			}
-			
-			// on change, save and re-filter
-			select.addEventListener('change', () => {
-			localStorage.setItem('archive_year', select.value);
-			filterPosts();
-			});
-			
-			// initial filter
-			filterPosts();
+				const select = document.getElementById('archive_popup');
+
+				function filterPosts() {
+					const sel = select.value;
+					// show/hide each post container
+					document.querySelectorAll('.h-feed .post-container').forEach(el => {
+						el.style.display = (sel === "all" || el.getAttribute('data-year') === sel) ? '' : 'none';
+					});
+
+					// show/hide each year header based on whether any following post container is visible
+					document.querySelectorAll('.h-feed h3[data-year]').forEach(header => {
+						let next = header.nextElementSibling;
+						let keep = false;
+						while (next && !next.matches('h3[data-year]')) {
+							if (next.matches('.post-container') && (next.style.display != 'none')) {
+								keep = true; break;
+							}
+							next = next.nextElementSibling;
+						}
+						header.style.display = keep ? '' : 'none';
+					});
+				}
+
+				// on change, re-filter
+				select.addEventListener('change', filterPosts);
+
+				// initial filter
+				filterPosts();
 			})();
-			</script>
-		</article>
-	</main>
-{{ end }}
+		</script>
+	</article>
+</main>
+{{- end }}
