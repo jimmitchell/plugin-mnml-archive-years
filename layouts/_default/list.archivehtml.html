@@ -30,7 +30,8 @@
 		<div class="h-feed archive_posts">
 			{{- range $groupedByYear }}
 				<h3 class="archive-range year-header" data-year="{{ .Key }}">{{ .Key }}</h3>
-				{{- if eq select.value "all" }}
+				{{- $selectedYear := "" }}
+				{{- if eq $selectedYear "all" }}
 					{{- range .Pages }}
 					<div class="post-container" data-year="{{ .Date.Format "2006" }}">
 						<p class="post-date h-entry">
