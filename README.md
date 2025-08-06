@@ -1,4 +1,4 @@
-# **mnml**: Archive by Year
+# **mnml**: Archives by Year
 
 This Micro.blog plug-in for the **[mnml](https://micro.blog/account/plugins/view/138)** theme replaces your Archive page with a new page that allows filtering posts by year.
 
