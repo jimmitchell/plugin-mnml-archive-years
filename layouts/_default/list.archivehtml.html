@@ -14,49 +14,30 @@
 		{{- end }}
 
 		{{- $posts := where .Site.RegularPages "Type" "post" }}
-		{{- $groupedByYear := $posts.GroupByDate "2006" }}
-		{{- $groupedByMonthYear := $posts.GroupByDate "2006-01" }}
+		{{- $grouped := $posts.GroupByDate "2006" }}
 
 		<div class="archive_years">
 			<label for="archive_popup">{{ T "Show posts from" }}:</label>
 			<select id="archive_popup">
 				<option value="all">{{ T "All years" }}</option>
-				{{ range $groupedByYear }}
+				{{ range $grouped }}
 				<option value="{{ .Key }}">{{ .Key }}</option>
 				{{ end }}
 			</select>
 		</div>
 
 		<div class="h-feed archive_posts">
-			{{- range $groupedByYear }}
-				<h3 class="archive-range year-header" data-year="{{ .Key }}">{{ .Key }}</h3>
-				{{- $selectedYear := "" }}
-				{{- if eq $selectedYear "all" }}
-					{{- range .Pages }}
-					<div class="post-container" data-year="{{ .Date.Format "2006" }}">
-						<p class="post-date h-entry">
-							<a href="{{ .Permalink }}">{{- if .Site.Params.use_short_date }}{{ .Date | time.Format ":date_short" }}{{- else }}{{ .Date | time.Format ":date_full" }}{{- end }} →</a>
-						</p>
-						<div class="entry">
-							<p>{{- if .Title }}<b>{{ .Title | safeHTML }}:</b>&nbsp;{{- end }}{{ .Summary | safeHTML | truncate 300  }}</p>
-						</div>
+			{{- range $grouped }}
+				<h3 class="archive-range" data-year="{{ .Key }}">{{ .Key }}</h3>
+				{{- range .Pages }}
+				<div class="post-container" data-year="{{ .Date.Format "2006" }}">
+					<p class="post-date h-entry">
+						<a href="{{ .Permalink }}">{{- if .Site.Params.use_short_date }}{{ .Date | time.Format ":date_short" }}{{- else }}{{ .Date | time.Format ":date_full" }}{{- end }} →</a>
+					</p>
+					<div class="entry">
+						<p>{{- if .Title }}<b>{{ .Title | safeHTML }}:</b>&nbsp;{{- end }}{{ .Summary | safeHTML | truncate 300  }}</p>
 					</div>
-					{{- end }}
-				{{- else }}
-					{{- $monthYearGrouped := where $groupedByMonthYear "Key" (printf "%s" .Key) }}
-					{{- range $monthYearGrouped }}
-						<h4 class="archive-range month-header" data-month-year="{{ .Key }}">{{ .Key }}</h4>
-						{{- range .Pages }}
-						<div class="post-container" data-year="{{ .Date.Format "2006" }}">
-							<p class="post-date h-entry">
-								<a href="{{ .Permalink }}">{{- if .Site.Params.use_short_date }}{{ .Date | time.Format ":date_short" }}{{- else }}{{ .Date | time.Format ":date_full" }}{{- end }} →</a>
-							</p>
-							<div class="entry">
-								<p>{{- if .Title }}<b>{{ .Title | safeHTML }}:</b>&nbsp;{{- end }}{{ .Summary | safeHTML | truncate 300  }}</p>
-							</div>
-						</div>
-						{{- end }}
-					{{- end }}
+				</div>
 				{{- end }}
 			{{- end }}
 		</div>
@@ -73,23 +54,10 @@
 					});
 
 					// show/hide each year header based on whether any following post container is visible
-					document.querySelectorAll('.h-feed .year-header').forEach(header => {
+					document.querySelectorAll('.h-feed h3[data-year]').forEach(header => {
 						let next = header.nextElementSibling;
 						let keep = false;
-						while (next && !next.matches('.year-header')) {
-							if (next.matches('.post-container') && (next.style.display != 'none')) {
-								keep = true; break;
-							}
-							next = next.nextElementSibling;
-						}
-						header.style.display = keep ? '' : 'none';
-					});
-
-					// show/hide each month header based on whether any following post container is visible
-					document.querySelectorAll('.h-feed .month-header').forEach(header => {
-						let next = header.nextElementSibling;
-						let keep = false;
-						while (next && !next.matches('.year-header') && !next.matches('.month-header')) {
+						while (next && !next.matches('h3[data-year]')) {
 							if (next.matches('.post-container') && (next.style.display != 'none')) {
 								keep = true; break;
 							}
