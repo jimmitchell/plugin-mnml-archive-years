@@ -16,6 +16,7 @@
 		{{- $posts := where .Site.RegularPages "Type" "post" }}
 		{{- $groupedByYear := $posts.GroupByDate "2006" }}
 		{{- $groupedByYearMonth := $posts.GroupByDate "2006-01" }}
+		{{- $months := slice "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" }}
 
 		<div class="archive_years">
 			<label for="archive_popup">{{ T "Show posts from" }}:</label>
@@ -31,8 +32,8 @@
 			{{- range $groupedByYearMonth }}
 				{{- $yearMonth := .Key }}
 				{{- $year := index (split $yearMonth "-") 0 }}
-				{{- $month := index (split $yearMonth "-") 1 }}
-				{{- $monthName := printf "%s-01" $month | time.Parse "01-02" | time.Format "January" }}
+				{{- $monthNum := int (index (split $yearMonth "-") 1) }}
+				{{- $monthName := index $months (sub $monthNum 1) }}
 				<h3 class="archive-range" data-year="{{ $year }}" data-year-month="{{ $yearMonth }}">{{ $monthName }} {{ $year }}</h3>
 				{{- range .Pages }}
 				<div class="post-container" data-year="{{ .Date.Format "2006" }}" data-year-month="{{ .Date.Format "2006-01" }}">
