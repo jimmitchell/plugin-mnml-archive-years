@@ -32,7 +32,7 @@
 				{{- $yearMonth := .Key }}
 				{{- $year := index (split $yearMonth "-") 0 }}
 				{{- $month := index (split $yearMonth "-") 1 }}
-				{{- $monthName := cond (eq $month "01") "January" (cond (eq $month "02") "February" (cond (eq $month "03") "March" (cond (eq $month "04") "April" (cond (eq $month "05") "May" (cond (eq $month "06") "June" (cond (eq $month "07") "July" (cond (eq $month "08") "August" (cond (eq $month "09") "September" (cond (eq $month "10") "October" (cond (eq $month "11") "November" "December")))))))))) }}
+				{{- $monthName := printf "%s-%s-01" $year $month | time.Parse "2006-01-02" | time.Format "January" }}
 				<h3 class="archive-range" data-year="{{ $year }}" data-year-month="{{ $yearMonth }}">{{ $monthName }} {{ $year }}</h3>
 				{{- range .Pages }}
 				<div class="post-container" data-year="{{ .Date.Format "2006" }}" data-year-month="{{ .Date.Format "2006-01" }}">
