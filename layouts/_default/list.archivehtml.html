@@ -30,9 +30,10 @@
 		<div class="h-feed archive_posts">
 			{{- range $groupedByYearMonth }}
 				{{- $yearMonth := .Key }}
-				{{- $year := printf "%s-01-01" (index (split $yearMonth "-") 0) | time.Parse "2006-01-02" }}
-				{{- $month := printf "%s-%s-01" (index (split $yearMonth "-") 0) (index (split $yearMonth "-") 1) | time.Parse "2006-01-02" }}
-				<h3 class="archive-range" data-year="{{ $year.Format "2006" }}" data-year-month="{{ $yearMonth }}">{{ $month.Format "January 2006" }}</h3>
+				{{- $year := index (split $yearMonth "-") 0 }}
+				{{- $month := index (split $yearMonth "-") 1 }}
+				{{- $monthName := printf "%s-01" $month | time.Parse "01-02" | time.Format "January" }}
+				<h3 class="archive-range" data-year="{{ $year }}" data-year-month="{{ $yearMonth }}">{{ $monthName }} {{ $year }}</h3>
 				{{- range .Pages }}
 				<div class="post-container" data-year="{{ .Date.Format "2006" }}" data-year-month="{{ .Date.Format "2006-01" }}">
 					<p class="post-date h-entry">
