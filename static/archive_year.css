@@ -1,10 +1,46 @@
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: var(--background);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: contain;
+  border: 1px solid var(--accent-2);
+  border-radius: 3rem;
+  color: var(--accent-3);
+  cursor: pointer;
+  padding: 1px 9px;
+}
+
+select:hover,
+select:active {
+  border-color: var(--link);
+  color: var(--background);
+  background: var(--link);
+}
+
+@media (prefers-color-scheme: light) {
+  select {
+    background-image: url(arrow-dark.svg);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  select {
+    background-image: url(arrow-light.svg);
+  }
+}
+
 .archive_years {
   display: flex;
   align-items: center;
 }
+
 .archive_years label {
   margin-right: 10px;
 }
+
 .category-list {
   margin-bottom: 3.5rem;
 }
