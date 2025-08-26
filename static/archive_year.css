@@ -27,6 +27,10 @@ select:active {
   color: var(--background);
 }
 
+select:focus {
+  outline: none;
+}
+
 @media (prefers-color-scheme: light) {
   select {
     background-image: url(arrow-dark.svg);
