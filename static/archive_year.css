@@ -16,9 +16,12 @@ select {
 
 select:hover,
 select:active {
+  background: var(--link);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 3px) center;
+  background-size: 2rem;
   border-color: var(--link);
   color: var(--background);
-  background: var(--link);
 }
 
 @media (prefers-color-scheme: light) {
