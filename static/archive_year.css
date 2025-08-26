@@ -7,7 +7,7 @@ select {
   background-position: calc(100% - 3px) center;
   background-size: 2rem;
   border: 1px solid var(--accent-2);
-  border-radius: 3rem;
+  border-radius: var(--border-radius);
   color: var(--accent-3);
   cursor: pointer;
   padding: 1px 9px;
