@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "mnml: Archives by Year",
   "description": "A Micro.blog plugin to filter the mnml theme archive page by year.",
   "includes": [
