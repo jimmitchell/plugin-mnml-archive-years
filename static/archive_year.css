@@ -6,7 +6,7 @@ select {
   background-repeat: no-repeat;
   background-position: calc(100% - 3px) center;
   background-size: 2rem;
-  border: 1px solid var(--accent-1);
+  border: 1px solid var(--accent-2);
   border-radius: var(--border-radius);
   color: var(--accent-3);
   cursor: pointer;
