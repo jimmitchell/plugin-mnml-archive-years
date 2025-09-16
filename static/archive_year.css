@@ -25,6 +25,7 @@ select:active {
   background-size: 2rem;
   border-color: var(--link);
   color: var(--background);
+  transition: color 0.15s ease-in-out, background 0.15s ease-in-out, border 0.15s ease-in-out;
 }
 
 select:focus {
